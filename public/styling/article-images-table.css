@@ -1,0 +1,188 @@
+  /* article-images-table.css */
+
+  .pages-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.pages-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* 💡 Force equal columns */
+}
+
+.pages-table th,
+.pages-table td {
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+/* Equal column widths (25% each) */
+.pages-table th:nth-child(1),
+.pages-table td:nth-child(1),
+.pages-table th:nth-child(2),
+.pages-table td:nth-child(2),
+.pages-table th:nth-child(3),
+.pages-table td:nth-child(3),
+.pages-table th:nth-child(4),
+.pages-table td:nth-child(4) {
+    width: 25%;
+}
+
+/* Image preview */
+.img-preview {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Copy input + button */
+.copy-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.copy-container input {
+    width: 150px;
+    font-size: 12px;
+    padding: 4px 6px;
+}
+
+.copy-container button {
+    font-size: 12px;
+    padding: 4px 8px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Universal Responsive Layouts for All Devices */
+@media (max-width: 1200px) {
+  .pages-table-container {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 16px !important;
+    box-sizing: border-box;
+  }
+}
+@media (max-width: 950px) {
+  .pages-table-container {
+    padding: 12px !important;
+  }
+}
+@media (max-width: 768px) {
+  .pages-table-container {
+    padding: 8px !important;
+  }
+}
+@media (max-width: 600px) {
+  .pages-table-container {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 4px !important;
+    box-sizing: border-box;
+  }
+  .pages-table, table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .pages-table th, .pages-table td, th, td {
+    min-width: 120px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 400px) {
+  .pages-table-container {
+    padding: 2px !important;
+    font-size: 13px;
+  }
+}
+@media (min-width: 1440px) {
+  .pages-table-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 1920px) {
+  .pages-table-container {
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 2560px) {
+  .pages-table-container {
+    max-width: 2400px;
+    margin: 0 auto;
+  }
+}
+
+/* Pagination Container */
+.modern-pagination .pagination {
+    display: flex;
+    justify-content: center; /* 👈 Center the pagination */
+    margin: 0 auto;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 6px 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Pagination Links */
+.modern-pagination .page-link {
+    color: #0d6efd;
+    border: none;
+    background-color: #f1f5f9;
+    padding: 0.45rem 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-pagination .page-link:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Active Page */
+.modern-pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 0 0 2px #cfe2ff;
+}
+
+/* Disabled Page */
+.modern-pagination .page-item.disabled .page-link {
+    background-color: #e2e8f0;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Responsive Fix for Small Devices */
+@media (max-width: 576px) {
+    .modern-pagination .pagination {
+        justify-content: center;
+    }
+}
+
+

@@ -1,0 +1,135 @@
+#contact-messages-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+}
+
+/* Header */
+#contact-messages-header {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+#contact-messages-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+}
+
+/* Table layout */
+#contact-messages-table-wrapper {
+    overflow-x: auto;
+}
+
+#contact-messages-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    table-layout: fixed; /* Equal column widths */
+    text-align: left;
+}
+
+#contact-messages-table thead {
+    background-color: #f8f8f8;
+}
+
+#contact-messages-table th,
+#contact-messages-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Fixed width only for ID */
+#contact-messages-table th:first-child,
+#contact-messages-table td:first-child {
+    width: 60px;
+    text-align: center;
+}
+
+/* Row hover */
+#contact-messages-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Pagination fix */
+.mt-3 {
+    margin-top: 1rem !important;
+}
+.d-flex.justify-content-center {
+    justify-content: center;
+    display: flex;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #contact-messages-table th,
+    #contact-messages-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+
+
+
+/* Pagination Container */
+.modern-pagination .pagination {
+    display: flex;
+    justify-content: center; /* 👈 Center the pagination */
+    margin: 0 auto;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 6px 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Pagination Links */
+.modern-pagination .page-link {
+    color: #0d6efd;
+    border: none;
+    background-color: #f1f5f9;
+    padding: 0.45rem 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-pagination .page-link:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Active Page */
+.modern-pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 0 0 2px #cfe2ff;
+}
+
+/* Disabled Page */
+.modern-pagination .page-item.disabled .page-link {
+    background-color: #e2e8f0;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Responsive Fix for Small Devices */
+@media (max-width: 576px) {
+    .modern-pagination .pagination {
+        justify-content: center;
+    }
+}
+

@@ -1,0 +1,626 @@
+@extends('layouts.app')
+
+@section('Main-content')
+<!-- Add CSS Link -->
+<link rel="stylesheet" href="{{ asset('styling/pages.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+ 
+         <style>
+              /* Main Container */
+    .pages-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Header Section */
+    .pages-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .pages-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .add-page-btn,
+    .upload-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .add-page-btn {
+        background: #3b82f6;
+        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+    }
+
+    .add-page-btn:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .upload-btn {
+        background: #10b981;
+        box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+    }
+
+    .upload-btn:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Table Styles */
+    .pages-table-container {
+        overflow-x: auto;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .pages-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .pages-table th {
+        background: #f8fafc;
+        padding: 1.25rem;
+        text-align: left;
+        font-weight: 600;
+        color: #64748b;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .pages-table td {
+        padding: 1.25rem;
+        border-bottom: 1px solid #e2e8f0;
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
+
+    .pages-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .pages-table tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    /* Equal width columns */
+    .pages-table th:nth-child(1),
+    .pages-table td:nth-child(1) {
+        width: 70%;
+    }
+
+    .pages-table th:nth-child(2),
+    .pages-table td:nth-child(2) {
+        width: 30%;
+        text-align: center;
+    }
+
+    /* Profile Image Column */
+    .profile-image-cell {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .profile-image-container {
+        min-width: 80px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #f1f5f9;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        flex-shrink: 0;
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .profile-image:hover {
+        transform: scale(1.05);
+    }
+
+    .default-icon {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8fafc;
+        color: #cbd5e1;
+        font-size: 1.75rem;
+    }
+
+    .page-info {
+        flex-grow: 1;
+    }
+
+    .page-name {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.25rem;
+        font-size: 1.1rem;
+    }
+
+    .page-link {
+        color: #64748b;
+        font-size: 0.9rem;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .page-id {
+        color: #94a3b8;
+        font-size: 0.8rem;
+        font-family: monospace;
+    }
+
+    /* Action Buttons */
+   
+
+    /* Pagination */
+    .modern-pagination {
+        margin-top: 2rem;
+    }
+
+    .modern-pagination .pagination {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .modern-pagination .page-item .page-link {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        border: none;
+        color: #64748b;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .modern-pagination .page-item.active .page-link {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .modern-pagination .page-item:not(.active) .page-link:hover {
+        background: #f1f5f9;
+        color: #3b82f6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .pages-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .add-page-btn,
+        .upload-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .profile-image-cell {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .pages-table th:nth-child(1),
+        .pages-table td:nth-child(1),
+        .pages-table th:nth-child(2),
+        .pages-table td:nth-child(2) {
+            width: auto;
+            display: block;
+        }
+
+        .pages-table td:nth-child(2) {
+            text-align: center;
+            padding-top: 0;
+        }
+    }
+
+    /* Global Action Buttons Styling */
+
+/* Action buttons container */
+.action-buttons {
+    margin-left: 90px;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* Enhanced delete button styling */
+.delete-btn {
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    padding: 0.4rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.15rem;
+    position: relative;
+    overflow: hidden;
+    font-size: 0.65rem;
+    font-weight: 500;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.delete-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.delete-btn:hover::before {
+    left: 100%;
+}
+
+.delete-btn:hover {
+    background: rgba(220, 38, 38, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+    border-color: rgba(220, 38, 38, 0.3);
+}
+
+.delete-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.delete-btn svg {
+    width: 14px;
+    height: 14px;
+    transition: all 0.3s ease;
+    z-index: 1;
+    position: relative;
+}
+
+.delete-btn:hover svg {
+    transform: scale(1.1) rotate(5deg);
+    color: #dc2626;
+}
+
+.delete-btn span {
+    display: block;
+    font-size: 0.6rem;
+    line-height: 1;
+    z-index: 1;
+    position: relative;
+    font-weight: 600;
+}
+
+.delete-btn:hover span {
+    color: #dc2626;
+}
+
+/* Edit button enhancement */
+.edit-btn {
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.1);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    padding: 0.4rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.15rem;
+    position: relative;
+    overflow: hidden;
+    font-size: 0.65rem;
+    font-weight: 500;
+    width: 42px;
+    height: 42px;
+    text-decoration: none;
+}
+
+.edit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(79, 70, 229, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.edit-btn:hover::before {
+    left: 100%;
+}
+
+.edit-btn:hover {
+    background: rgba(79, 70, 229, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+    border-color: rgba(79, 70, 229, 0.3);
+}
+
+.edit-btn:active {
+    transform: translateY(0);
+}
+
+.edit-btn svg {
+    width: 14px;
+    height: 14px;
+    transition: all 0.3s ease;
+    z-index: 1;
+    position: relative;
+}
+
+.edit-btn:hover svg {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.edit-btn span {
+    display: block;
+    font-size: 0.6rem;
+    line-height: 1;
+    z-index: 1;
+    position: relative;
+    font-weight: 600;
+}
+
+/* Form styling */
+.delete-form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Pagination Container */
+.modern-pagination .pagination {
+    display: flex;
+    justify-content: center; /* 👈 Center the pagination */
+    margin: 0 auto;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 6px 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Pagination Links */
+.modern-pagination .page-link {
+    color: #0d6efd;
+    border: none;
+    background-color: #f1f5f9;
+    padding: 0.45rem 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-pagination .page-link:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Active Page */
+.modern-pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 0 0 2px #cfe2ff;
+}
+
+/* Disabled Page */
+.modern-pagination .page-item.disabled .page-link {
+    background-color: #e2e8f0;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Responsive Fix for Small Devices */
+@media (max-width: 576px) {
+    .modern-pagination .pagination {
+        justify-content: center;
+    }
+}
+         </style>
+
+
+
+<div class="pages-container">
+    <!-- Header Section -->
+    <div class="pages-header">
+        <h1 class="pages-title">Profile</h1>
+        <div class="header-actions">
+           <form id="uploadForm" action="{{ route('profile.upload') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <label for="fileInput" class="upload-btn">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <span>Upload Profile Image</span>
+    </label>
+    <input type="file" name="image" id="fileInput" accept="image/*" style="display: none;" onchange="submitUploadForm()">
+</form>
+
+
+
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="pages-table-container">
+        <table class="pages-table">
+            <thead>
+                <tr>
+                    <th>Profile Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($profiles as $profile) 
+                <tr>
+                    <td>
+                        <div class="profile-image-cell">
+                            <div class="profile-image-container">
+                           @if($profile->profile_image) 
+                                @if($profile->profile_image)
+                                <img src="{{ asset($profile->profile_image) }}" class="profile-image"
+                                    alt="Profile Image">
+                                @else
+                                <div class="default-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                @endif
+                            @else 
+                                <div class="default-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                               @endif 
+                            </div>
+                            <div class="page-info">
+                                <div class="page-name"></div>
+                                <div class="page-link"></div>
+                                <div class="page-id"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                                <a href="{{route('profile.edit',$profile->id)}}" class="edit-btn">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                    </svg>
+                                    <span>Update</span>
+                                </a>
+                                
+                                <form action="" method="POST" class="delete-form" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="delete-btn" onclick="confirmDelete(this)">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                        <span>Remove</span>
+                                    </button>
+                                </form>
+
+                            </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+<!-- Delete Confirmation Script -->
+<script>
+    function confirmDelete(button) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Are you sure you want to delete this page?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Cancel',
+                background: '#ffffff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading message
+                    Swal.fire({
+                        title: 'Deleting...',
+                        text: 'Please wait while we delete the page',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Submit the form
+                    button.closest('form').submit();
+                }
+            });
+        }
+       
+</script>
+<script>
+    function submitUploadForm() {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length > 0) {
+            document.getElementById('uploadForm').submit();
+        }
+    }
+</script>
+
+
+<!-- Include SweetAlert2 for beautiful alerts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+    function submitUploadForm() {
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length > 0) {
+            form.submit(); // Submit only when a file is selected
+        }
+    }
+</script
+@endsection
