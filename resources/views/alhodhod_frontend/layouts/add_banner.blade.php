@@ -10,6 +10,7 @@
     <div class="slider-container">
         <div class="slider" style="direction: ltr !important;">
             @foreach($ads as $ad)
+         
                 <div class="slide">
                     <a href="javascript:;" onclick="ad_click('{{ $ad->id }}','{{ $ad->ad_link }}');">
                         <img src="{{ $ad->ad_url }}" alt="Ad {{ $loop->iteration }}" style="width:100% !important;">

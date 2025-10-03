@@ -1,8 +1,30 @@
-const languageBtn = document.getElementById("dropdownMenuButton1");
-const languageDropdown = document.getElementsByClassName("dropdown-menu")[0];
+document.addEventListener("DOMContentLoaded", function () {
+  const allDropdowns = document.querySelectorAll(".dropdown");
 
-languageDropdown.classList.add("hidden");
+  allDropdowns.forEach(dropdown => {
+    const menu = dropdown.querySelector(".dropdown-menu");
+    if (!menu) return;
 
-languageBtn.addEventListener("click", () => {
-  languageDropdown.classList.toggle("hidden");
+    // Hide menu initially
+    menu.classList.remove("show");
+
+    dropdown.addEventListener("mouseenter", () => {
+      menu.classList.add("show");
+    });
+
+    dropdown.addEventListener("mouseleave", () => {
+      menu.classList.remove("show");
+    });
+
+    menu.addEventListener("click", e => {
+      e.stopPropagation();
+    });
+  });
+
+  // Clicking outside closes all menus
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown-menu.show").forEach(menu => {
+      menu.classList.remove("show");
+    });
+  });
 });

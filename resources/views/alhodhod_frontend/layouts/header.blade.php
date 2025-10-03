@@ -1,3 +1,4 @@
+<html>
 <head>
     @php
         $metaPath = meta_path();
@@ -24,6 +25,12 @@
     <link rel="alternate" hreflang="fr" href="{{ base_url() }}?lang=fr" />
     <link rel="alternate" hreflang="ar" href="{{ base_url() }}?lang=ar" />
     <link rel="canonical" href="{{ base_url() }}?lang={{ get_active_language() }}" />
+    <!-- Bootstrap CSS -->
+
+
+<!-- Bootstrap JS Bundle (includes Popper.js) -->
+
+
 
     {{-- CSS Links --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -40,7 +47,7 @@
 
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
+    
 
 
     {{-- Your App's Stylesheet --}}
@@ -53,4 +60,12 @@
     <style>
         /* Add your inline styles here if needed */
     </style>
+
+    
 </head>
+<body>
+<script src="{{ asset('asset/js/main.js') }}?v={{ time() }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+
+</body>
+</html>

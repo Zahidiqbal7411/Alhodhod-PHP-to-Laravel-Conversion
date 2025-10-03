@@ -401,6 +401,45 @@ footer p {
   letter-spacing: 0em;
   text-align: center;
 }
+.navbar-nav .nav-link {
+  color: white !important;
+  padding: 8px 16px;
+  text-transform: capitalize;
+}
+.navbar{
+  margin-left: 300px;
+  padding-top: 25px;
+  
+}
+.dropdown-menu {
+  background-color: rgba(0, 0, 0, 0.8); /* semi-transparent black */
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  width: auto !important;
+  backdrop-filter: blur(6px); /* optional: adds a blur effect behind */
+  color: white;
+}
+
+
+.dropdown-menu .dropdown-item {
+  color: white;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #444;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown a {
+
+
+  color:white;
+  text-decoration: none;
+}
 #dropdownMenuButton1 button {
   background: transparent;
   border: none;
@@ -415,31 +454,42 @@ footer p {
   border: thin solid rgba(77, 77, 77, 0.3);
   border-radius: 4px;
   padding: 5px 10px;
+  color:white;
 }
 
 .dropdown-menu.hidden {
   display: none !important;
   opacity: 0;
 }
+.dropdown.nav-link {
+  position: relative;
+ 
+}
+
 .dropdown-menu {
-  position: absolute;
-  z-index: 1000;
-  display: block !important;
-  min-width: 5rem !important;
-  transition: opacity 0.3s ease;
-  opacity: 1;
-  top: 40px;
+  position: absolute !important;
+  top: 100%;
   left: 0;
+  display: none;       /* hidden by default */
+  background-color: #222;
+  color: white;
+  width: 200px;
+
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
   padding: 0;
   margin: 0;
-  font-size: 1rem;
-  color: #212529;
-  text-align: left;
   list-style: none;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 0.25rem;
+  z-index: 1000;
+}
+
+.dropdown-menu.show {
+  display: block;      /* shown when JS adds .show */
+}
+
+
+.dropdown-menu a:hover {
+  background-color: #444;    /* Subtle hover highlight */
 }
 .mobileLogo {
   display: none;

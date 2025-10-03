@@ -2,7 +2,7 @@
     <div class="hero_container">
         <!-- navbar -->
         <nav class="navbar">
-            <ul class="nav-list">
+            {{-- <ul class="nav-list">
                 @foreach ($pages as $page)
                     @php
                         $pageId = $page->id;
@@ -16,7 +16,7 @@
                             <a href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}">
                                 {{ $page->page_name }}
                             </a>
-                            <div class="dropdown-content">
+                            <div class="dropdown-menu hidden">
                                 @foreach ($pageMenus as $menu)
                                     <a href="#" data-id="{{ $menu['id'] }}">{{ $menu['menu_title'] }}</a>
                                 @endforeach
@@ -24,14 +24,44 @@
                         </li>
                     @else
                         <!-- Normal nav item for pages without menus -->
-                        <li>
+                        <li class="dropdown">
                             <a href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}">
                                 {{ $page->page_name }}
                             </a>
                         </li>
                     @endif
                 @endforeach
-            </ul>
+            </ul> --}}
+            <ul class="nav-list navbar-nav d-flex flex-row gap-3">
+    @foreach ($pages as $page)
+        @php
+            $pageId = $page->id;
+            $pageMenus = $menusGroupedByPage[$pageId] ?? [];
+            $hasSubMenus = !empty($pageMenus);
+        @endphp
+
+        <li class="nav-item dropdown">
+            <a class="nav-link {{ $hasSubMenus ? 'dropdown-toggle' : '' }}" 
+               href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}"
+               {{ $hasSubMenus ? 'data-bs-toggle=dropdown role=button aria-expanded=false' : '' }}>
+                {{ $page->page_name }}
+            </a>
+
+            @if ($hasSubMenus)
+                <ul class="dropdown-menu">
+                    @foreach ($pageMenus as $menu)
+                        <li>
+                            <a class="dropdown-item" href="#" data-id="{{ $menu['id'] }}">
+                                {{ $menu['menu_title'] }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </li>
+    @endforeach
+</ul>
+
             <div class="hamburger" id="hamburger-icon">
                 &#9776;
             </div>
@@ -105,3 +135,5 @@
         </div>
     </div>
 </section>
+
+
