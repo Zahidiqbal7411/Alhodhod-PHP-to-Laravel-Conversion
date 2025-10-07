@@ -92,7 +92,7 @@
             $language_wordings = config('global.language_wordings');
         @endphp
 
-        <div id="dropdownMenuButton1" class="dropdown">
+        {{-- <div id="dropdownMenuButton1" class="dropdown">
             <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="flag-icon flag-icon-{{ $flag }} me-1"></span>
             </button>
@@ -113,7 +113,30 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
+        <div id="dropdownMenuButton1" class="dropdown">
+  <button class="dropdown-toggle" type="button">
+    <span class="flag-icon flag-icon-{{ $flag }} me-1"></span>
+  </button>
+  <ul class="dropdown-menu"  id="dropdown-menu-lang" aria-labelledby="dropdownMenuButton1">
+    <li>
+      <a class="dropdown-item {{ $english_active }}" href="{{ url('/?lang=en') }}">
+        <span class="flag-icon flag-icon-us me-1"></span>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item {{ $french_active }}" href="{{ url('/?lang=fr') }}">
+        <span class="flag-icon flag-icon-fr me-1"></span>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item {{ $arabic_active }}" href="{{ url('/?lang=ar') }}">
+        <span class="flag-icon flag-icon-sa me-1"></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
 
         <div class="content text-center">
             <p {!! $directionn !!}>

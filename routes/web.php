@@ -89,13 +89,22 @@ Route::middleware('auth')->group(function () {
   
  
 });
-  Route::get('/', [HomeController::class, 'index'])->name('home');
+
+  
   Route::prefix('frontend')->name('frontend.')->group(function () {
   
     
 });
+// Default home route → Dream Explorer
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Optional named route for clarity
+Route::get('/dream-explorer', [HomeController::class, 'index'])->name('dream.explorer');
 
-Route::get('/test-config', function () {
-    return config('global.language_wordings.english.2');
-});
+// Slug-based dynamic routes
+Route::get('/chapter/{slug}', [HomeController::class, 'index']);
+Route::get('/word/{slug}', [HomeController::class, 'index']);
+Route::get('/dream/{slug}', [HomeController::class, 'index']);
+
+// Data provider route for JS
+Route::get('/dream-data', [HomeController::class, 'dreamData'])->name('dream.data');

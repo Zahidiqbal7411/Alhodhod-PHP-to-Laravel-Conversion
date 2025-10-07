@@ -61,7 +61,8 @@
         /* Add your inline styles here if needed */
     </style>
 
-    
+    <base href="{{ url('/') }}/">
+
 </head>
 <body>
 <script src="{{ asset('asset/js/main.js') }}?v={{ time() }}"></script>
