@@ -9,8 +9,19 @@ class Chapter extends Model
     protected $primaryKey = 'chapter_id';
     public $timestamps = false;
 
-    public function words()
-    {
-        return $this->hasMany(Word::class, 'chapter_id', 'chapter_id');
+    protected $fillable = [
+        'chapter_title',
+        'chapter_details',
+        'chapter_slug',
+        'lang'
+    ];
+
+    public function words(){
+        return $this->hasMany(Word::class , 'chapter_id' , 'chapter_id');
     }
+  
+    public function dreams(){
+        return $this->hasMany(Dream::class , 'chapter_dreams_id' , 'chapter_id');
+    }
+  
 }

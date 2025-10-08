@@ -20,7 +20,7 @@
         <h2 class="text-center mb-5 fw-bold text-gradient">🌙 Dream Explorer</h2>
 
         <!-- Search Section -->
-        <div class="row mt-4 justify-content-center">
+        {{-- <div class="row mt-4 justify-content-center">
             <div class="col-lg-8">
                 <div class="input-group shadow rounded-pill overflow-hidden">
                     <input type="text" id="searchInput" class="form-control border-0 ps-4"
@@ -36,7 +36,7 @@
 
                 <div id="searchResults" class="mt-3"></div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- HTML: put this where your original row was -->
         <div class="row g-4">
