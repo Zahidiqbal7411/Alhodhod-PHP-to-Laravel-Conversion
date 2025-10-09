@@ -53,6 +53,7 @@
     {{-- Your App's Stylesheet --}}
     {{-- <link href="{{ base_url() }}/styles.css" rel="stylesheet" /> --}}
     <link href="{{ asset('asset/css/style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('asset/css/rtl.css') }}" rel="stylesheet" />
     
 
 

@@ -2,57 +2,26 @@
     <div class="hero_container">
         <!-- navbar -->
         <nav class="navbar">
-            {{-- <ul class="nav-list">
-                @foreach ($pages as $page)
-                    @php
-                        $pageId = $page->id;
-                        $pageMenus = $menusGroupedByPage[$pageId] ?? [];
-                        $onclick = ($page->page_link !== "#") ? "onclick=\"ajax_load('{$page->page_link}', '')\"" : '';
-                    @endphp
-
-                    @if (!empty($pageMenus))
-                        <!-- Dropdown for pages with menus -->
-                        <li class="dropdown">
-                            <a href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}">
-                                {{ $page->page_name }}
-                            </a>
-                            <div class="dropdown-menu hidden">
-                                @foreach ($pageMenus as $menu)
-                                    <a href="#" data-id="{{ $menu['id'] }}">{{ $menu['menu_title'] }}</a>
-                                @endforeach
-                            </div>
-                        </li>
-                    @else
-                        <!-- Normal nav item for pages without menus -->
-                        <li class="dropdown">
-                            <a href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}">
-                                {{ $page->page_name }}
-                            </a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul> --}}
-            <ul class="nav-list navbar-nav d-flex flex-row gap-3">
+           
+<ul class="nav-list navbar-nav d-flex flex-row gap-3">
     @foreach ($pages as $page)
         @php
-            $pageId = $page->id;
-            $pageMenus = $menusGroupedByPage[$pageId] ?? [];
-            $hasSubMenus = !empty($pageMenus);
+            $hasSubMenus = $page->menus->isNotEmpty();
         @endphp
 
         <li class="nav-item dropdown">
-            <a class="nav-link {{ $hasSubMenus ? 'dropdown-toggle' : '' }}" 
+            <a class="nav-link {{ $hasSubMenus ? 'dropdown-toggle' : '' }}"
                href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}"
                {{ $hasSubMenus ? 'data-bs-toggle=dropdown role=button aria-expanded=false' : '' }}>
-                {{ $page->page_name }}
+                {{ $page->localized_name }}
             </a>
 
             @if ($hasSubMenus)
                 <ul class="dropdown-menu">
-                    @foreach ($pageMenus as $menu)
+                    @foreach ($page->menus as $menu)
                         <li>
-                            <a class="dropdown-item" href="#" data-id="{{ $menu['id'] }}">
-                                {{ $menu['menu_title'] }}
+                            <a class="dropdown-item" href="#" data-id="{{ $menu->id }}">
+                                {{ $menu->localized_title }}
                             </a>
                         </li>
                     @endforeach
@@ -61,6 +30,7 @@
         </li>
     @endforeach
 </ul>
+
 
             <div class="hamburger" id="hamburger-icon">
                 &#9776;
@@ -92,33 +62,16 @@
             $language_wordings = config('global.language_wordings');
         @endphp
 
-        {{-- <div id="dropdownMenuButton1" class="dropdown">
-            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="flag-icon flag-icon-{{ $flag }} me-1"></span>
-            </button>
-            <ul class="dropdown-menu hidden" aria-labelledby="dropdownMenuButton1">
-                <li>
-                    <a class="dropdown-item {{ $english_active }}" href="{{ url('/?lang=en') }}">
-                        <span class="flag-icon flag-icon-us me-1"></span>
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item {{ $french_active }}" href="{{ url('/?lang=fr') }}">
-                        <span class="flag-icon flag-icon-fr me-1"></span>
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item {{ $arabic_active }}" href="{{ url('/?lang=ar') }}">
-                        <span class="flag-icon flag-icon-sa me-1"></span>
-                    </a>
-                </li>
-            </ul>
-        </div> --}}
-        <div id="dropdownMenuButton1" class="dropdown">
+       
+        <div id="dropdownMenuButton1" class="dropdown" >
   <button class="dropdown-toggle" type="button">
     <span class="flag-icon flag-icon-{{ $flag }} me-1"></span>
   </button>
-  <ul class="dropdown-menu"  id="dropdown-menu-lang" aria-labelledby="dropdownMenuButton1">
+
+
+  {{-- <ul class="dropdown-menu"  id="dropdown-menu-lang" aria-labelledby="dropdownMenuButton1"> --}}
+    <ul class="dropdown-menu lang-dropdown-menu" id="dropdown-menu-lang">
+
     <li>
       <a class="dropdown-item {{ $english_active }}" href="{{ url('/?lang=en') }}">
         <span class="flag-icon flag-icon-us me-1"></span>
@@ -135,6 +88,8 @@
       </a>
     </li>
   </ul>
+
+  
 </div>
 
 

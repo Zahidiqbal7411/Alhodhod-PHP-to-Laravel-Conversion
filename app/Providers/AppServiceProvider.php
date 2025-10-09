@@ -21,9 +21,10 @@ class AppServiceProvider extends ServiceProvider
             if (!function_exists('get_active_language') || !function_exists('get_language_wordings')) {
                 return;
             }
-
+              
             $activelanguage = get_active_language();
             $language_wordings = get_language_wordings();
+              $lang = get_active_language();
 
             $pages = Page::all();
             $menus = Menu::all();
@@ -38,7 +39,10 @@ class AppServiceProvider extends ServiceProvider
                 'language_wordings',
                 'pages',
                 'menusGroupedByPage',
-                'directionn'
+                'directionn',
+                'lang'
+                
+                
             ));
         });
     }

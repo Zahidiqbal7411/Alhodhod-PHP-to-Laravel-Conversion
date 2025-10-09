@@ -18,10 +18,17 @@ class Chapter extends Model
 
     public function words(){
         return $this->hasMany(Word::class , 'chapter_id' , 'chapter_id');
+        
     }
   
     public function dreams(){
         return $this->hasMany(Dream::class , 'chapter_dreams_id' , 'chapter_id');
+      
     }
+    public function scopeLang($query, $lang)
+{
+    return $query->where('lang', $lang);
+}
+
   
 }

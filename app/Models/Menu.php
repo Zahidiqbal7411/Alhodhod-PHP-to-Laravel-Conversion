@@ -21,4 +21,11 @@ class Menu extends Model
     public function article(){
         return $this->hasMany(Article::class);
     }
+    // app/Models/Menu.php
+public function getLocalizedTitleAttribute()
+{
+    $lang = get_active_language();
+    return $this->{"menu_{$lang}"} ?? $this->menu_title;
+}
+
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\BannerAdd;
 use App\Models\Article;
+use App\Models\Menu;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Chapter;
@@ -16,32 +17,55 @@ use PHPUnit\TextUI\Configuration\Php;
 
 class HomeController extends Controller
 {
+
+    private $lang;
+    private $activelanguage;
+    private $directionn;
+    private $leftArrow;
+    private $rightArrow;
+    public function __construct(){
+     $this->lang = get_active_language();
+    
+   
+    $this->activelanguage = config('global.available_languages')[$this->lang] ?? 'english';
+    
+    // $this->directionn = $this->lang === 'ar' ? 'dir="rtl"' : 'dir="ltr"';
+   
+    $this->leftArrow = $this->lang === 'ar' ? '❯' : '❮';
+
+    $this->rightArrow = $this->lang === 'ar' ? '❮' : '❯';
+    }
 public function index()
 {
-    $lang = get_active_language();
+
 
     $language_wordings = get_language_wordings();
-    $activelanguage = config('global.available_languages')[$lang] ?? 'english';
-    $directionn = $lang === 'ar' ? 'dir="rtl"' : 'dir="ltr"';
+  
+       $menuTitleColumn = 'menu_' . $this->lang;
+    $pageTitleColumn = 'page_' . $this->lang;
+
+    
+    $pages = Page::with('menus')->get();
 
     $articles = Article::select('article_title', 'article_slug', 'article_image', 'content')
-        ->where('lang', $lang)
+        ->where('lang', $this->lang)
         ->where('show_on_home_page', 1)
         ->orderBy('created_at', 'desc')
         ->get();
+  ;
 
-    $leftArrow = $lang === 'ar' ? '❯' : '❮';
-    $rightArrow = $lang === 'ar' ? '❮' : '❯';
 
-    return view('alhodhod_frontend.pages.Home', compact(
-        'language_wordings',
-        'activelanguage',
-        'directionn',
-        'articles',
-        'lang',
-        'leftArrow',
-        'rightArrow'
-    ));
+    return view('alhodhod_frontend.pages.Home', [
+        'language_wordings'=> $language_wordings,
+        'activelanguage'=> $this->activelanguage,
+        'directionn'=> $this->directionn,
+        'articles'=> $articles,
+        'lang'=> $this->lang,
+        'leftArrow'=> $this->leftArrow,
+        'rightArrow'=>$this->rightArrow,
+        'pages'=> $pages,
+       
+    ]);
 }
 
 
@@ -58,10 +82,11 @@ public function dreamData(Request $request)
 
     $data = [];
 
-    // Raw query to fetch chapters
-           $chapters = Chapter::with(['words.dreams'])->get(); // ✅ Now you're working with models
+    
+        //    $chapters = Chapter::with(['words.dreams'])->get(); 
 
-
+    $chapters = Chapter::with(['words.dreams'])->get();
+   
     foreach ($chapters as $chapter) {
         
         $chapterTitle = trim($chapter->chapter_title);
@@ -195,3 +220,14 @@ public function dreamData(Request $request)
 // }
 
 }
+
+
+
+
+
+   
+
+    
+
+
+   

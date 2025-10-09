@@ -164,3 +164,17 @@ if (!function_exists('get_ads')) {
     }
 }
 
+if (!function_exists('get_direction')) {
+    function get_direction($lang = null)
+    {
+        $lang = $lang ?? get_active_language();
+
+        $directions = [
+            'ar' => 'rtl',
+            'en' => 'ltr',
+            'fr' => 'ltr',
+        ];
+
+        return $directions[$lang] ?? 'ltr'; // fallback to LTR
+    }
+}

@@ -27,4 +27,12 @@ class Page extends Model
             default => $this->page_en,
         };
     }
+    // app/Models/Page.php
+
+public function getLocalizedNameAttribute()
+{
+    $lang = get_active_language(); // or app()->getLocale()
+    return $this->{"page_{$lang}"} ?? $this->page_name;
+}
+
 }

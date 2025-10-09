@@ -81,11 +81,7 @@ return [
         'ar' => 'arabic',
     ],
     
-    'zahid' => [
-        'en' => 'english',
-        'fr' => 'french',
-        'ar' => 'arabic',
-    ],
+    
 
     'ads_base_url' => 'https://www.alhodhod.com/manage_ad/public/',
 ];

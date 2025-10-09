@@ -27,4 +27,9 @@ class Dream extends Model
     public function Word(){
         return $this->belongsTo(Word::class , 'word_dreams_id' , 'word_id');
     }
+public function scopeLang($query, $lang)
+{
+    return $query->where('lang', $lang);
+}
+
 }
