@@ -2,34 +2,38 @@
     <div class="hero_container">
         <!-- navbar -->
         <nav class="navbar">
-           
-<ul class="nav-list navbar-nav d-flex flex-row gap-3">
-    @foreach ($pages as $page)
-        @php
-            $hasSubMenus = $page->menus->isNotEmpty();
-        @endphp
 
-        <li class="nav-item dropdown">
-            <a class="nav-link {{ $hasSubMenus ? 'dropdown-toggle' : '' }}"
-               href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}"
-               {{ $hasSubMenus ? 'data-bs-toggle=dropdown role=button aria-expanded=false' : '' }}>
-                {{ $page->localized_name }}
-            </a>
+            <ul class="nav-list navbar-nav d-flex flex-row gap-3">
+                @foreach ($pages as $page)
+                    @php
+                        $hasSubMenus = $page->menus->isNotEmpty();
+                    @endphp
 
-            @if ($hasSubMenus)
-                <ul class="dropdown-menu">
-                    @foreach ($page->menus as $menu)
-                        <li>
-                            <a class="dropdown-item" href="#" data-id="{{ $menu->id }}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link {{ $hasSubMenus ? 'dropdown-toggle' : '' }}"
+                            href="{{ $page->page_link === '#' ? 'javascript:;' : url('pages/' . $page->page_link) }}"
+                            {{ $hasSubMenus ? 'data-bs-toggle=dropdown role=button aria-expanded=false' : '' }}>
+                            {{ $page->localized_name }}
+                        </a>
+
+                        @if ($hasSubMenus)
+                            <ul class="dropdown-menu">
+                                @foreach ($page->menus as $menu)
+                                    <li>
+                                        {{-- <a class="dropdown-item" href="#" data-id="{{ $menu->id }}">
                                 {{ $menu->localized_title }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
-        </li>
-    @endforeach
-</ul>
+                            </a> --}}
+                                        <a class="dropdown-item" href="{{ route('menu.articles', $menu->id) }}">
+                                            {{ $menu->localized_title }}
+                                        </a>
+
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
 
 
             <div class="hamburger" id="hamburger-icon">
@@ -62,35 +66,35 @@
             $language_wordings = config('global.language_wordings');
         @endphp
 
-       
-        <div id="dropdownMenuButton1" class="dropdown" >
-  <button class="dropdown-toggle" type="button">
-    <span class="flag-icon flag-icon-{{ $flag }} me-1"></span>
-  </button>
+
+        <div id="dropdownMenuButton1" class="dropdown">
+            <button class="dropdown-toggle" type="button" id="humber-Btn">
+                <span class="flag-icon flag-icon-{{ $flag }} me-1"></span>
+            </button>
 
 
-  {{-- <ul class="dropdown-menu"  id="dropdown-menu-lang" aria-labelledby="dropdownMenuButton1"> --}}
-    <ul class="dropdown-menu lang-dropdown-menu" id="dropdown-menu-lang">
+            {{-- <ul class="dropdown-menu"  id="dropdown-menu-lang" aria-labelledby="dropdownMenuButton1"> --}}
+            <ul class="dropdown-menu lang-dropdown-menu" id="dropdown-menu-lang">
 
-    <li>
-      <a class="dropdown-item {{ $english_active }}" href="{{ url('/?lang=en') }}">
-        <span class="flag-icon flag-icon-us me-1"></span>
-      </a>
-    </li>
-    <li>
-      <a class="dropdown-item {{ $french_active }}" href="{{ url('/?lang=fr') }}">
-        <span class="flag-icon flag-icon-fr me-1"></span>
-      </a>
-    </li>
-    <li>
-      <a class="dropdown-item {{ $arabic_active }}" href="{{ url('/?lang=ar') }}">
-        <span class="flag-icon flag-icon-sa me-1"></span>
-      </a>
-    </li>
-  </ul>
+                <li>
+                    <a class="dropdown-item {{ $english_active }}" href="{{ url('/?lang=en') }}">
+                        <span class="flag-icon flag-icon-us me-1"></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item {{ $french_active }}" href="{{ url('/?lang=fr') }}">
+                        <span class="flag-icon flag-icon-fr me-1"></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item {{ $arabic_active }}" href="{{ url('/?lang=ar') }}">
+                        <span class="flag-icon flag-icon-sa me-1"></span>
+                    </a>
+                </li>
+            </ul>
 
-  
-</div>
+
+        </div>
 
 
         <div class="content text-center">
@@ -113,5 +117,3 @@
         </div>
     </div>
 </section>
-
-

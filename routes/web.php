@@ -108,3 +108,5 @@ Route::get('/dream/{slug}', [HomeController::class, 'index']);
 
 // Data provider route for JS
 Route::get('/dream-data', [HomeController::class, 'dreamData'])->name('dream.data');
+
+Route::get('/menu/{id}/articles', [HomeController::class, 'menuArticles'])->name('menu.articles');

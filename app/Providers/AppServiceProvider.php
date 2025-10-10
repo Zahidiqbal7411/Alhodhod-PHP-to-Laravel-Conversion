@@ -40,7 +40,10 @@ class AppServiceProvider extends ServiceProvider
                 'pages',
                 'menusGroupedByPage',
                 'directionn',
-                'lang'
+                'lang',
+                'menus',
+                
+
                 
                 
             ));

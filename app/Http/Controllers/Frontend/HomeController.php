@@ -64,11 +64,31 @@ public function index()
         'leftArrow'=> $this->leftArrow,
         'rightArrow'=>$this->rightArrow,
         'pages'=> $pages,
+
        
     ]);
 }
 
 
+public function menuArticles($id)
+{
+    $language_wordings = get_language_wordings();
+
+    $menu = Menu::with(['article' => function ($query) {
+        $query->where('lang', $this->lang); // only current language articles
+    }])->findOrFail($id);
+
+    return view('alhodhod_frontend.pages.Home', [
+        'language_wordings' => $language_wordings,
+        'activelanguage'    => $this->activelanguage,
+        'directionn'        => $this->directionn,
+        'lang'              => $this->lang,
+        'leftArrow'         => $this->leftArrow,
+        'rightArrow'        => $this->rightArrow,
+        'menu'              => $menu,
+        'articles'          => $menu->article,
+    ]);
+}
 
 
 
