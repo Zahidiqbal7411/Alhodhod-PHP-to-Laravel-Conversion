@@ -1,373 +1,234 @@
-{{-- <section>
-  <div class="container position-relative" data-lang="{{ $lang }}">
-    <!-- Left Navigation Button -->
-    <button class="scroll-btn left" onclick="scrollArticles('left')" style="display: {{ $articles->count() ? 'block' : 'none' }};">
-      {{ $leftArrow }}
-    </button>
 
-    <div class="row flex-nowrap overflow-hidden" id="articleRow">
-      @if($articles->count())
-        @foreach($articles as $article)
-          @php
-            $cleanContent = strip_tags(htmlspecialchars_decode($article->content));
-            $shortDescription = mb_strlen($cleanContent) > 300
-                ? mb_substr($cleanContent, 0, 300) . ' <strong>read more ...</strong>'
-                : $cleanContent;
-          @endphp
+@php
+    $articles_path = asset('manage_ad/public/');
+@endphp
 
-          <div class="col-md-4 col-sm-12 col-xs-12 col-lg-4">
-            <a href="{{ url('articles/' . urlencode($article->article_slug)) }}"
-               class="text-decoration-none text-dark">
-              <div class="card custom-card">
-                <img src="{{ asset($article->article_image) }}"
-                     class="card-img-top" alt="Article Image" style="height:200px;">
-                <div class="card-body">
-                  <h5 class="card-title">{{ $article->article_title }}</h5>
-                  <p class="card-text">{!! $shortDescription !!}</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        @endforeach
-      @else
-        <p class="text-center">No articles found.</p>
-      @endif
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: "Roboto", serif;
+    }
+
+    h3 {
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        padding-bottom: 5px;
+    }
+
+    h3::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0%;
+        height: 3px;
+        background-color: black;
+        transition: width 1.4s ease-in-out, left 0.4s ease-in-out;
+    }
+
+    h3:hover::after {
+        width: 60%;
+        left: 20%;
+    }
+
+    .article-wrapper {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f7ece6, #def5f2, #edeff9);
+    }
+
+    .article-heading {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .article-box {
+        max-width: 1000px;
+        margin: 0 auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .article-box img {
+        width: 100%;
+        height: auto;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .article-content {
+        padding: 1rem;
+    }
+
+    .article-content iframe {
+        width: 100% !important;
+        height: auto;
+        display: block;
+    }
+
+    .related-articles {
+        position: relative;
+        margin-top: 2rem;
+    }
+
+    .related-article-row {
+        display: flex;
+        overflow-x: auto;
+        gap: 1rem;
+        padding: 1rem 2rem;
+    }
+
+    .related-article-card {
+        flex: 0 0 30%;
+        min-width: 280px;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .related-article-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .related-article-card h5 {
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .related-article-card p {
+        font-size: 14px;
+    }
+
+    .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: blue;
+        color: white;
+        border: none;
+        font-size: 2rem;
+        padding: 8px 12px;
+        cursor: pointer;
+        z-index: 108;
+        border-radius: 50%;
+    }
+
+    .scroll-btn.left {
+        left: -20px;
+    }
+
+    .scroll-btn.right {
+        right: -20px;
+    }
+
+    .back-button-wrapper {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .back-button {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: #007bff;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .scroll-btn {
+            font-size: 1.5rem;
+            padding: 6px 10px;
+        }
+
+        .related-article-card {
+            flex: 0 0 90%;
+            margin: 0 auto;
+        }
+
+        .related-article-row {
+            scroll-snap-type: x mandatory;
+        }
+
+        .related-article-card {
+            scroll-snap-align: center;
+        }
+    }
+</style>
+
+<div class="article-wrapper">
+    <div class="article-heading">
+        <h3 style="font-weight: 700; font-size: 54px;">{{ $article->article_title }}</h3>
     </div>
 
-    <!-- Right Navigation Button -->
-    <button class="scroll-btn right" onclick="scrollArticles('right')" style="display: {{ $articles->count() ? 'block' : 'none' }};">
-      {{ $rightArrow }}
-    </button>
-  </div>
-</section> --}}
-{{-- <div class="container position-relative" data-lang="{{ $lang }}">
-    <!-- Scroll Left Button -->
-    <button class="scroll-btn left position-absolute top-50 start-0 translate-middle-y z-3" onclick="scrollArticles('left')" style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-        {{ $leftArrow }}
-    </button>
-
-    <!-- Scrollable Row -->
-    <div id="articleRow" class="row flex-nowrap overflow-auto px-2" style="scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
-        <style>
-            #articleRow::-webkit-scrollbar {
-                display: none;
-            }
-            .article-card {
-                min-width: 100%;
-            }
-
-            @media (min-width: 576px) {
-                .article-card {
-                    min-width: 80%;
-                }
-            }
-
-            @media (min-width: 768px) {
-                .article-card {
-                    min-width: 50%;
-                }
-            }
-
-            @media (min-width: 992px) {
-                .article-card {
-                    min-width: calc(100% / 3);
-                }
-            }
-
-            .scroll-padding-end {
-                padding-right: 3rem; /* Padding to prevent last card overlap */
-            }
-        </style>
-
-        @foreach($articles as $article)
-            @php
-                $cleanContent = strip_tags(htmlspecialchars_decode($article->content));
-                $shortDescription = mb_strlen($cleanContent) > 300
-                    ? mb_substr($cleanContent, 0, 300) . ' <strong>read more ...</strong>'
-                    : $cleanContent;
-            @endphp
-
-            <div class="col-12 col-sm-10 col-md-6 col-lg-4 article-card">
-                <a href="{{ url('articles/' . urlencode($article->article_slug)) }}" class="text-decoration-none text-dark">
-                    <div class="card custom-card h-100">
-                        <img src="{{ asset('uploadimage/article_image/quran.jpg') }}" class="card-img-top" alt="Article Image" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $article->article_title }}</h5>
-                            <p class="card-text">{!! $shortDescription !!}</p>
-                        </div>
-                    </div>
-                </a>
+    <div class="article-container" style="margin-bottom: 1.5rem;">
+        <div class="article-box" data-aos="fade-down-right">
+            <img src="{{ asset('uploadimage/article_image/quran.jpg') }}" alt="Article Image">
+            <div class="article-content">
+                <p style="text-align: center;">{!! $article->content !!}</p>
             </div>
-        @endforeach
-
-        <!-- Spacer at the end to prevent overlap with right button -->
-        <div class="scroll-padding-end"></div>
+        </div>
     </div>
 
-    <!-- Scroll Right Button -->
-    <button class="scroll-btn right position-absolute top-50 end-0 translate-middle-y z-3" onclick="scrollArticles('right')" style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-        {{ $rightArrow }}
-    </button>
-</div> --}}
-{{-- <div class="container position-relative" data-lang="{{ $lang }}">
-    <!-- Scroll Left Button -->
-    <button class="scroll-btn left position-absolute top-50 start-0 translate-middle-y z-3" onclick="scrollArticles('left')" style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-        {{ $leftArrow }}
-    </button>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-4511775489420895"
+        data-ad-slot="7497405544"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 
-    <!-- Scrollable Card Row -->
-    <div id="articleRow" class="d-flex flex-nowrap overflow-auto px-2" style="scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
-        <style>
-            #articleRow::-webkit-scrollbar {
-                display: none;
-            }
+    @if (isset($related_articles) && $related_articles->isNotEmpty())
+        <div class="related-articles">
+            <button class="scroll-btn left" onclick="scrollArticles('left')">❮</button>
 
-            .article-card {
-                flex: 0 0 calc(100% / 3 - 1rem); /* Show 3 cards per screen */
-                margin-right: 1rem;
-            }
-
-            @media (max-width: 992px) {
-                .article-card {
-                    flex: 0 0 50%;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .article-card {
-                    flex: 0 0 80%;
-                }
-            }
-
-            @media (max-width: 576px) {
-                .article-card {
-                    flex: 0 0 100%;
-                }
-            }
-
-            /* Right spacer to prevent overlap with scroll button */
-            .scroll-end-spacer {
-                flex: 0 0 40px; /* same or more than button width */
-                pointer-events: none;
-            }
-        </style>
-
-        @foreach($articles as $article)
-            @php
-                $cleanContent = strip_tags(htmlspecialchars_decode($article->content));
-                $shortDescription = mb_strlen($cleanContent) > 300
-                    ? mb_substr($cleanContent, 0, 300) . ' <strong>read more ...</strong>'
-                    : $cleanContent;
-            @endphp
-
-            <div class="article-card">
-                <a href="{{ url('articles/' . urlencode($article->article_slug)) }}" class="text-decoration-none text-dark">
-                    <div class="card custom-card h-100">
-                        <img src="{{ asset('uploadimage/article_image/quran.jpg') }}" class="card-img-top" alt="Article Image" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $article->article_title }}</h5>
-                            <p class="card-text">{!! $shortDescription !!}</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        @endforeach
-
-        <!-- Right Spacer to fix clipping -->
-        <div class="scroll-end-spacer"></div>
-    </div>
-
-    <!-- Scroll Right Button -->
-    <button class="scroll-btn right position-absolute top-50 end-0 translate-middle-y z-3" onclick="scrollArticles('right')" style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-        {{ $rightArrow }}
-    </button>
-</div> --}}
-{{-- <div class="container position-relative" data-lang="{{ $lang }}">
-    <!-- Scroll Left Button -->
-    <button class="scroll-btn left position-absolute top-50 start-0 translate-middle-y z-3 ms-2" 
-            onclick="scrollArticles('left')" 
-            style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-        {{ $leftArrow }}
-    </button>
-
-    <!-- Scrollable Card Row -->
-    <div id="articleRow" 
-         class="d-flex flex-nowrap overflow-auto px-2" 
-         style="scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
-        <style>
-            #articleRow::-webkit-scrollbar {
-                display: none;
-            }
-
-            .article-card {
-                flex: 0 0 calc(100% / 3 - 1rem); /* 3 cards per screen */
-                margin-right: 1rem;
-            }
-
-            @media (max-width: 992px) {
-                .article-card {
-                    flex: 0 0 50%;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .article-card {
-                    flex: 0 0 80%;
-                }
-            }
-
-            @media (max-width: 576px) {
-                .article-card {
-                    flex: 0 0 100%;
-                }
-            }
-
-            .scroll-end-spacer {
-                flex: 0 0 100px; /* Space after last card */
-                pointer-events: none;
-            }
-        </style>
-
-        @foreach($articles as $article)
-            @php
-                $cleanContent = strip_tags(htmlspecialchars_decode($article->content));
-                $shortDescription = mb_strlen($cleanContent) > 300
-                    ? mb_substr($cleanContent, 0, 300) . ' <strong>read more ...</strong>'
-                    : $cleanContent;
-            @endphp
-
-            <div class="article-card">
-                <a href="{{ url('articles/' . urlencode($article->article_slug)) }}" class="text-decoration-none text-dark">
-                    <div class="card custom-card h-100">
-                        <img src="{{ asset('uploadimage/article_image/quran.jpg') }}" class="card-img-top" alt="Article Image" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $article->article_title }}</h5>
-                            <p class="card-text">{!! $shortDescription !!}</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        @endforeach
-
-        <!-- Spacer after the last card to prevent overlap -->
-        <div class="scroll-end-spacer"></div>
-    </div>
-
-    <!-- Scroll Right Button with margin -->
-    <button class="scroll-btn right position-absolute top-50 end-0 translate-middle-y z-3 me-2" 
-            onclick="scrollArticles('right')" 
-            style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-        {{ $rightArrow }}
-    </button>
-</div> --}}
-
-<div class="container position-relative" data-lang="{{ $lang }}">
-    <div class="position-relative">
-
-        <!-- ✅ Outer wrapper to prevent overflow leak -->
-        <div class="overflow-hidden">
-            <!-- ✅ Scrollable Card Row with Left and Right Padding -->
-            <div id="articleRow"
-                 class="d-flex flex-nowrap overflow-auto ps-5 pe-4 pb-3" {{-- 👈 Add ps-5 --}}
-                 style="scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; overflow-y: hidden; scroll-snap-type: x mandatory;
-                    scroll-padding-left: 1rem;">
-                 
-                <style>
-                    #articleRow::-webkit-scrollbar {
-                        display: none;
-                    }
-
-                    .article-card {
-                        flex: 0 0 32%;
-                        max-width: 32%;
-                        margin-right: 2%;
-                    }
-
-                    @media (max-width: 992px) {
-                        .article-card {
-                            flex: 0 0 48%;
-                            max-width: 48%;
-                            margin-right: 4%;
-                        }
-                    }
-
-                    @media (max-width: 768px) {
-                        .article-card {
-                            flex: 0 0 80%;
-                            max-width: 80%;
-                            margin-right: 5%;
-                        }
-                    }
-
-                    @media (max-width: 576px) {
-                        .article-card {
-                            flex: 0 0 100%;
-                            max-width: 100%;
-                            margin-right: 0;
-                        }
-                    }
-                </style>
-
-                @foreach($articles as $article)
+            <div class="related-article-row" id="articleRow">
+                @foreach ($related_articles as $related)
                     @php
-                        $cleanContent = strip_tags(htmlspecialchars_decode($article->content));
+                        $cleanContent = strip_tags($related->content);
                         $shortDescription = mb_strlen($cleanContent) > 300
                             ? mb_substr($cleanContent, 0, 300) . ' <strong>read more ...</strong>'
                             : $cleanContent;
                     @endphp
-
-                    <div class="article-card">
-                        <a href="{{ url('articles/' . urlencode($article->article_slug)) }}" class="text-decoration-none text-dark">
-                            <div class="card custom-card h-100">
-                                <img src="{{ asset('uploadimage/article_image/quran.jpg') }}"
-                                     class="card-img-top"
-                                     alt="Article Image"
-                                     style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $article->article_title }}</h5>
-                                    <p class="card-text">{!! $shortDescription !!}</p>
-                                </div>
+                    <div class="related-article-card">
+                        <a href="{{ url('/articles/' . urlencode($related->article_slug)) }}" style="text-decoration: none; color: inherit;">
+                            <img src="{{ $articles_path . '/' . $related->article_image }}" alt="Article Image">
+                            <div style="padding: 1rem;">
+                                <h5>{{ $related->article_title }}</h5>
+                                <p>{!! $shortDescription !!}</p>
                             </div>
                         </a>
                     </div>
                 @endforeach
             </div>
+
+            <button class="scroll-btn right" onclick="scrollArticles('right')">❯</button>
         </div>
+    @endif
 
-        <!-- ✅ Left Scroll Button with margin over padding -->
-        <button class="scroll-btn left position-absolute top-50 start-0 translate-middle-y z-3 ms-2"
-                onclick="scrollArticles('left')"
-                style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-            {{ $leftArrow }}
-        </button>
-
-        <!-- ✅ Right Scroll Button -->
-        <button class="scroll-btn right position-absolute top-50 end-0 translate-middle-y z-3 me-2"
-                onclick="scrollArticles('right')"
-                style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-            {{ $rightArrow }}
-        </button>
+    <div class="back-button-wrapper">
+        <a href="{{ url('/') }}" class="back-button">Back to Home</a>
     </div>
 </div>
 
+<script>
+    AOS.init();
 
-
-    <!-- Scroll Right Button -->
-    <button class="scroll-btn right position-absolute top-50 end-0 translate-middle-y z-3" onclick="scrollArticles('right')" style="display: {{ $articles->count() > 3 ? 'block' : 'none' }};">
-        {{ $rightArrow }}
-    </button>
-</div>
-
-
-    <!-- Right Button -->
-    <button class="scroll-btn right position-absolute top-50 end-0 translate-middle-y z-3" onclick="scrollArticles('right')" style="display: {{ $articles->count() ? 'block' : 'none' }};">
-        {{ $rightArrow }}
-    </button>
-</div>
-
-
-  <!-- Right Button -->
-  <button class="scroll-btn right" onclick="scrollArticles('right')" style="display: {{ $articles->count() ? 'block' : 'none' }};">
-    {{ $rightArrow }}
-  </button>
-</div>
+    function scrollArticles(direction) {
+        const container = document.getElementById('articleRow');
+        const scrollAmount = 700;
+        container.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+</script>

@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-
 document.addEventListener('DOMContentLoaded', function () {
   const menuLinks = document.querySelectorAll('.menu-link');
 
@@ -74,23 +73,17 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
 
       const menuId = this.dataset.id;
-
-      // Elements to update
       const dreamContainer = document.querySelector('.dream-container');
-      console.log('Clicked menu ID:', dreamContainer);
       const articleRow = document.querySelector('#articleRow');
 
       if (!menuId || !articleRow) return;
 
-      // Hide dream container
       if (dreamContainer) {
         dreamContainer.style.display = 'none';
       }
 
-      // Clear current articles
       articleRow.innerHTML = '<p>Loading...</p>';
 
-      // Fetch new articles via AJAX
       fetch(`/menu/${menuId}/articles`)
         .then(res => res.json())
         .then(data => {
@@ -99,6 +92,9 @@ document.addEventListener('DOMContentLoaded', function () {
           } else {
             articleRow.innerHTML = '<p>No articles found.</p>';
           }
+
+          // Scroll vertically to articleRow after content is loaded
+          articleRow.scrollIntoView({ behavior: 'smooth', block: 'start' });
         })
         .catch(err => {
           console.error('Error fetching articles:', err);
@@ -107,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
 
 
 function scrollArticles(direction) {

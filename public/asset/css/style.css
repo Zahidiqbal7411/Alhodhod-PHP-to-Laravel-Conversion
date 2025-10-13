@@ -1,3 +1,94 @@
+  /* globally used fonts  */
+       
+
+
+.slider-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    
+    /* ✅ Prevent layout shift */
+    height: 370px; /* Set according to your image height */
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    flex: 0 0 100%;
+    max-width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps aspect ratio, fills container */
+    display: block;
+}
+
+.dots {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 4px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #333;
+}
+
+#articleRow {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+}
+#articleRow::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Force consistent card width */
+.article-card {
+  flex: 0 0 410px; /* or 320px */
+  margin-right: 2.3rem;
+  scroll-snap-align: start;
+}
+
+/* Make sure images fit nicely */
+.article-card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Optional hover styling */
+.custom-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
+.custom-card:hover {
+  transform: translateY(-5px);
+}
 * {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;

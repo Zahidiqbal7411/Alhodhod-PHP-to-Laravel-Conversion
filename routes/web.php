@@ -110,3 +110,4 @@ Route::get('/dream/{slug}', [HomeController::class, 'index']);
 Route::get('/dream-data', [HomeController::class, 'dreamData'])->name('dream.data');
 
 Route::get('/menu/{id}/articles', [HomeController::class, 'menuArticles'])->name('menu.articles');
+Route::get('/articles/{slug}', [HomeController::class, 'show'])->name('articles.show');

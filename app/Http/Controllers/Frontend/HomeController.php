@@ -144,12 +144,8 @@ public function dreamData(Request $request)
         }
     }
 
-    // Banner ads
-    // $adsSql = "SELECT id, ad_url, ad_text, ad_link 
-    //            FROM banner_ads 
-    //            WHERE ad_type = 3 AND ar = 1 AND ad_status = 1
-    //            ORDER BY created_at DESC";
-    // $ads = DB::select($adsSql);
+    
+   
     $ads = BannerAdd::where('ad_type', 3)
         ->where('ar', 1)
         ->where('ad_status', 1)
@@ -169,75 +165,25 @@ public function dreamData(Request $request)
     }, $ads);
 
     return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+     
 }
 
 
 
-// public function dreamData(Request $request)
-// {
-//     $action = $request->query('action');
 
-//     if ($action !== 'data') {
-//         return response()->json(['error' => 'Invalid action'], 400);
-//     }
+  public function show($slug)
+    {
+        // Fetch main article by slug
+        $article= Article::where('article_slug', $slug)->firstOrFail();
 
-//     $data = [];
+        // Fetch related articles with the same menu_id, excluding current article and filtered by language if needed
+        $related_articles = Article::where('menu_id', $article->menu_id)
+            ->where('article_slug', '!=', $slug)
+            // ->where('lang', $lang_key) // Uncomment if language filtering is needed
+            ->get();
 
-   
-//     $chapters = Chapter::all()->with(['words.dreams'])->get();
-
-
-
-//     foreach ($chapters as $chapter) {
-//          $chapterId = (int)$chapter->chapter_id;
-//         $chapterTitle = trim($chapter->chapter_title);
-       
-      
-//         $data[$chapterTitle] = [
-//             'chapter_details' => trim($chapter->chapter_details),
-//             'chapter_slug' => trim($chapter->chapter_slug),
-//         ];
-       
-
-
-//         foreach ($chapter->words as $word) {
-//             $wordTitle = trim($word->word_title);
-
-//             $data[$chapterTitle][$wordTitle] = [
-//                 'word_slug' => trim($word->word_slug),
-//             ];
-
-//             foreach ($word->dreams as $dream) {
-//                 $dreamTitle = trim($dream->dream_title);
-//                 $data[$chapterTitle][$wordTitle][$dreamTitle] = [
-//                     'dream_slug' => trim($dream->dream_slug),
-//                     'meaning' => trim($dream->dreams_meaning)
-//                 ];
-//             }
-//         }
-//     }
-
-
-    
-//     $ads = BannerAdd::where('ad_type', 3)
-//         ->where('ar', 1)
-//         ->where('ad_status', 1)
-//         ->orderByDesc('created_at')
-//         ->get(['id', 'ad_url', 'ad_text', 'ad_link']);
-
-//     $bannerAdPath = config('app.banner_ad_path', '/banner_ads');
-
-//     $data['_ads'] = $ads->map(function ($ad) use ($bannerAdPath) {
-//         return [
-//             'id' => (int)$ad->id,
-//             'url' => rtrim($bannerAdPath, '/') . '/' . ltrim($ad->ad_url, '/'),
-//             'text' => trim($ad->ad_text),
-//             'link' => trim($ad->ad_link),
-//         ];
-//     });
-
-//     return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
-// }
+        return view('alhodhod_frontend.layouts.article', compact('article', 'related_articles'));
+    }
 
 }
 

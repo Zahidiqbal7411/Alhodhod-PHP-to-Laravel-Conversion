@@ -92,7 +92,7 @@
 
     </div>
 
-@section('scripts')
+@push('scripts')
 
    
 <script>
@@ -412,4 +412,4 @@ window.onpopstate = () => {
 
 
 
-@endsection
+@endpush
