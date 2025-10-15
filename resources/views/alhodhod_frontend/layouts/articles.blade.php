@@ -22,7 +22,7 @@
                     <div class="article-card">
                         <a href="{{ url('articles/' . urlencode($article->article_slug)) }}" class="text-decoration-none text-dark">
                             <div class="card custom-card h-100">
-                                <img src="{{ asset('uploadimage/article_image/quran.jpg') }}"
+                                <img src="{{ asset($article->article_image) }}"
                                      class="card-img-top"
                                      alt="Article Image"
                                      style="height: 200px; object-fit: cover;">

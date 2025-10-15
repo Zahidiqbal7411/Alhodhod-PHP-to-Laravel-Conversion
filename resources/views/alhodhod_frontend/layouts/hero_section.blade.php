@@ -23,7 +23,7 @@
                                         {{-- <a class="dropdown-item" href="#" data-id="{{ $menu->id }}">
                                 {{ $menu->localized_title }}
                             </a> --}}
-                                        <a class="dropdown-item" href="{{ route('menu.articles', $menu->id) }}">
+                                        <a class="dropdown-item"  href="{{ route('menu.articles', $menu->id) }}">
                                             {{ $menu->localized_title }}
                                         </a>
 
@@ -117,3 +117,4 @@
         </div>
     </div>
 </section>
+

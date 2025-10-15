@@ -39,7 +39,7 @@
         </div> --}}
 
         <!-- HTML: put this where your original row was -->
-        <div class="row g-4">
+        <div class="row g-4 hide-dream">
             <div id="chapterDetailsCol" class="col-12">
                 <section id="chapterDetailsCard" class="fade-in show section-box text-center">
                     <header class="section-header">
@@ -94,7 +94,10 @@
 
 @push('scripts')
 
-   
+   <script>
+  const assetBase = "{{ asset('') }}"; 
+</script>
+
 <script>
 let data = {};
 const wordsDiv = document.getElementById("words");
@@ -296,16 +299,24 @@ function showDescription(chapter, word, dream) {
   let adsHtml = "";
   if (data["_ads"] && Array.isArray(data["_ads"]) && data["_ads"].length) {
     adsHtml = `
-      <div class="mt-4">
-        ${data["_ads"].map(ad => `
-          <div class="p-3 mb-3 text-center border rounded bg-light" style="direction:rtl;">
-            ${ad.url ? `
-              <a href="${ad.link || '#'}" target="_blank">
-                <img src="${ad.url}" alt="إعلان" class="img-fluid rounded mb-2" style="max-height:250px; object-fit:cover;">
-              </a>` : ""}
-            ${ad.text ? `<p class="mb-0">${ad.text}</p>` : ""}
-          </div>`).join("")}
-      </div>`;
+  <div class="mt-4">
+    ${data["_ads"].map(ad => `
+      <div class="p-3 mb-3 text-center border rounded bg-light" style="direction:rtl;">
+        ${ad.url ? `
+          <a href="${ad.link || '#'}" target="_blank">
+            <img 
+              src="${assetBase}${ad.url}" 
+              alt="إعلان" 
+              class="img-fluid rounded mb-2" 
+              style="max-height:250px; object-fit:cover;"
+            >
+          </a>` 
+        : ""}
+        ${ad.text ? `<p class="mb-0">${ad.text}</p>` : ""}
+      </div>
+    `).join("")}
+  </div>
+`;
   }
 
   descriptionDiv.innerHTML = `

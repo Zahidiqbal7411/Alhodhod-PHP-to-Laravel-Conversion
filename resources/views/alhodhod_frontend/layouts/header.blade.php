@@ -76,13 +76,13 @@
 
 </head>
 <body>
-<script src="{{ asset('asset/js/main.js') }}?v={{ time() }}"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4511775489420895"
      crossorigin="anonymous"></script>
-
+<script src="{{ asset('asset/js/main.js') }}?v={{ time() }}"></script>
 </body>
 </html>
