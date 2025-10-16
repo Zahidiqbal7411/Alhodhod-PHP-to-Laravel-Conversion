@@ -1,11 +1,9 @@
-
 @php
     $articles_path = asset('manage_ad/public/');
 @endphp
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
-/* ---------- BODY & HEADINGS ---------- */
 body {
     background-color: #f8f9fa;
     font-family: "Roboto", serif;
@@ -36,7 +34,6 @@ h3:hover::after {
     left: 20%;
 }
 
-/* ---------- ARTICLE WRAPPER ---------- */
 .article-wrapper {
     padding: 1.5rem;
     background: linear-gradient(135deg, #f7ece6, #def5f2, #edeff9);
@@ -73,7 +70,6 @@ h3:hover::after {
     display: block;
 }
 
-/* ---------- RELATED ARTICLES ---------- */
 .related-articles {
     position: relative;
     margin-top: 2rem;
@@ -85,7 +81,7 @@ h3:hover::after {
     gap: 1rem;
     padding: 1rem 2rem;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    -webkit-overflow-scrolling: touch;
 }
 
 .related-article-row::-webkit-scrollbar {
@@ -93,12 +89,11 @@ h3:hover::after {
 }
 
 .related-article-row {
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
 }
 
-/* ---------- RELATED ARTICLE CARD ---------- */
 .related-article-card {
-    flex: 0 0 calc((100% - 2rem)/3); /* 3 cards per row on desktop */
+    flex: 0 0 calc((100% - 2rem)/3);
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
@@ -107,7 +102,7 @@ h3:hover::after {
     transition: transform 0.2s;
     display: flex;
     flex-direction: column;
-    height: 320px; /* consistent height */
+    height: 320px;
 }
 
 .related-article-card:hover {
@@ -116,7 +111,7 @@ h3:hover::after {
 
 .related-article-card img {
     width: 100%;
-    height: 180px; /* fixed image height */
+    height: 180px;
     object-fit: cover;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -137,39 +132,11 @@ h3:hover::after {
     overflow: hidden;
 }
 
-/* ---------- SCROLL BUTTONS ---------- */
-/* .scroll-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #007bff;
-    color: white;
-    border: none;
-    font-size: 2rem;
-    padding: 8px 12px;
-    cursor: pointer;
-    z-index: 10;
-    border-radius: 50%;
-    transition: background 0.2s;
-}
-
-.scroll-btn:hover {
-    background-color: #0056b3;
-}
-
-.scroll-btn.left {
-    left: 5px;
-}
-
-.scroll-btn.right {
-    right: 5px;
-} */
- /* ---------- SCROLL BUTTONS ---------- */
 .scroll-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 123, 255, 0.85); /* semi-transparent blue */
+    background-color: rgba(0, 123, 255, 0.85);
     color: white;
     border: none;
     font-size: 2rem;
@@ -188,8 +155,8 @@ h3:hover::after {
 }
 
 .scroll-btn:hover {
-    background-color: rgba(0, 123, 255, 1); /* solid blue on hover */
-    transform: translateY(-50%) scale(1.1); /* slightly bigger on hover */
+    background-color: rgba(0, 123, 255, 1);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .scroll-btn.left {
@@ -200,7 +167,6 @@ h3:hover::after {
     right: 5px;
 }
 
-/* ---------- RESPONSIVE ADJUSTMENTS ---------- */
 @media (max-width: 768px) {
     .scroll-btn {
         width: 40px;
@@ -209,8 +175,6 @@ h3:hover::after {
     }
 }
 
-
-/* ---------- BACK BUTTON ---------- */
 .back-button-wrapper {
     text-align: center;
     margin-top: 2rem;
@@ -230,19 +194,18 @@ h3:hover::after {
     background: #0056b3;
 }
 
-/* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
     .related-article-card {
-        flex: 0 0 calc((100% - 1rem)/2); /* 2 cards per row on tablets */
+        flex: 0 0 calc((100% - 1rem)/2);
         height: 300px;
     }
 }
 
 @media (max-width: 768px) {
     .related-article-card {
-        flex: 0 0 90%; /* 1 card per row on mobile */
+        flex: 0 0 90%;
         margin: 0 auto;
-        height: auto; /* let content adjust */
+        height: auto;
     }
 
     .related-article-row {
@@ -253,8 +216,6 @@ h3:hover::after {
         scroll-snap-align: center;
     }
 }
-
-
 </style>
 
 <div class="article-wrapper">
@@ -282,9 +243,8 @@ h3:hover::after {
     </script>
 
     @if (isset($related_articles) && $related_articles->isNotEmpty())
-        {{-- <div class="related-articles">
+        <div class="related-articles">
             <button class="scroll-btn left" onclick="scrollArticles('left')">❮</button>
-
             <div class="related-article-row" id="articleRow">
                 @foreach ($related_articles as $related)
                     @php
@@ -296,7 +256,7 @@ h3:hover::after {
                     <div class="related-article-card">
                         <a href="{{ url('/articles/' . urlencode($related->article_slug)) }}" style="text-decoration: none; color: inherit;">
                             <img src="{{ asset($related->article_image) }}" alt="Article Image">
-                            <div style="padding: 1rem;">
+                            <div>
                                 <h5>{{ $related->article_title }}</h5>
                                 <p>{!! $shortDescription !!}</p>
                             </div>
@@ -304,34 +264,8 @@ h3:hover::after {
                     </div>
                 @endforeach
             </div>
-
             <button class="scroll-btn right" onclick="scrollArticles('right')">❯</button>
-        </div> --}}
-        <div class="related-articles">
-  <button class="scroll-btn left" onclick="scrollArticles('left')">❮</button>
-
-  <div class="related-article-row" id="articleRow">
-    @foreach ($related_articles as $related)
-      @php
-        $cleanContent = strip_tags($related->content);
-        $shortDescription = mb_strlen($cleanContent) > 300
-            ? mb_substr($cleanContent, 0, 300) . ' <strong>read more ...</strong>'
-            : $cleanContent;
-      @endphp
-      <div class="related-article-card">
-        <a href="{{ url('/articles/' . urlencode($related->article_slug)) }}" style="text-decoration: none; color: inherit;">
-          <img src="{{ asset($related->article_image) }}" alt="Article Image">
-          <div>
-            <h5>{{ $related->article_title }}</h5>
-            <p>{!! $shortDescription !!}</p>
-          </div>
-        </a>
-      </div>
-    @endforeach
-  </div>
-
-  <button class="scroll-btn right" onclick="scrollArticles('right')">❯</button>
-</div>
+        </div>
     @endif
 
     <div class="back-button-wrapper">
@@ -341,7 +275,6 @@ h3:hover::after {
 
 <script>
     AOS.init();
-
     function scrollArticles(direction) {
         const container = document.getElementById('articleRow');
         const scrollAmount = 700;

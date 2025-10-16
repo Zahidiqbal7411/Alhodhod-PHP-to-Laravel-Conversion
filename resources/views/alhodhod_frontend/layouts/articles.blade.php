@@ -58,9 +58,16 @@
 
 
 
-@section('scripts')
+@push('scripts')
 
 <script>
     AOS.init();
 </script>
-@endsection
+
+  
+
+
+</script>
+
+
+@endpush

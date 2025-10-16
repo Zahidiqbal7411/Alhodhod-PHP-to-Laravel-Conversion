@@ -1,4 +1,3 @@
-    
     <div class="d-flex justify-content-center align-items-center">
         <span role="img" class="anticon"><svg width="713" height="77" viewBox="0 0 713 77" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -92,217 +91,226 @@
 
     </div>
 
-@push('scripts')
+    @push('scripts')
+        <script>
+            const assetBase = "{{ asset('') }}";
+        </script>
 
-   <script>
-  const assetBase = "{{ asset('') }}"; 
-</script>
+        <script>
+            let data = {};
+            const wordsDiv = document.getElementById("words");
+            const dreamsDiv = document.getElementById("dreams");
+            const descriptionDiv = document.getElementById("description");
+            const chapterDetailsDiv = document.getElementById("chapterDetails");
 
-<script>
-let data = {};
-const wordsDiv = document.getElementById("words");
-const dreamsDiv = document.getElementById("dreams");
-const descriptionDiv = document.getElementById("description");
-const chapterDetailsDiv = document.getElementById("chapterDetails");
+            const wordsCol = document.getElementById("wordsCol");
+            const chapterDetailsCol = document.getElementById("chapterDetailsCol");
+            const dreamsCol = document.getElementById("dreamsCol");
+            const descriptionCol = document.getElementById("descriptionCol");
 
-const wordsCol = document.getElementById("wordsCol");
-const chapterDetailsCol = document.getElementById("chapterDetailsCol");
-const dreamsCol = document.getElementById("dreamsCol");
-const descriptionCol = document.getElementById("descriptionCol");
+            const chapterDetailsCard = document.getElementById("chapterDetailsCard");
+            const wordsCard = document.getElementById("wordsCard");
+            const dreamsCard = document.getElementById("dreamsCard");
+            const descriptionCard = document.getElementById("descriptionCard");
 
-const chapterDetailsCard = document.getElementById("chapterDetailsCard");
-const wordsCard = document.getElementById("wordsCard");
-const dreamsCard = document.getElementById("dreamsCard");
-const descriptionCard = document.getElementById("descriptionCard");
+            let selectedChapter = null;
+            let selectedWord = null;
+            let selectedDream = null;
+            const projectFolder = ""; // leave empty or set if needed
 
-let selectedChapter = null;
-let selectedWord = null;
-let selectedDream = null;
-const projectFolder = ""; // leave empty or set if needed
+            // ------------------ HELPERS ------------------
+            function fadeIn(el) {
+                if (el) {
+                    el.style.display = "block";
+                    requestAnimationFrame(() => el.classList.add("show"));
+                }
+            }
 
-// ------------------ HELPERS ------------------
-function fadeIn(el) {
-  if (el) {
-    el.style.display = "block";
-    requestAnimationFrame(() => el.classList.add("show"));
-  }
-}
-function hide(el) {
-  if (el) {
-    el.style.display = "none";
-    el.classList.remove("show");
-  }
-}
-function highlightActive(container, activeBtn) {
-  container.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
-  if (activeBtn) activeBtn.classList.add("active");
-}
-function scrollToElement(el) {
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
+            function hide(el) {
+                if (el) {
+                    el.style.display = "none";
+                    el.classList.remove("show");
+                }
+            }
 
-function getSlugFromURL() {
-  const path = decodeURIComponent(window.location.pathname);
-  const parts = path.split("/").filter(Boolean);
-  if (parts.length >= 2) return { type: parts[0], slug: parts[1] };
-  return null;
-}
-function updateURL(slug = "", type = "chapter") {
-  const newURL = slug ? `${projectFolder}/${type}/${encodeURIComponent(slug)}` : `${projectFolder}/`;
-  history.pushState({}, "", newURL);
-}
+            function highlightActive(container, activeBtn) {
+                container.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+                if (activeBtn) activeBtn.classList.add("active");
+            }
 
-// ------------------ LAYOUT ------------------
-function setLayout(state = "all") {
-  if (state === "all") {
-    wordsCol.style.display = "none";
-    dreamsCol.style.display = "none";
-    descriptionCol.style.display = "none";
-    chapterDetailsCol.className = "col-12";
-  } else if (state === "chapter") {
-    wordsCol.style.display = "block";
-    wordsCol.className = "col-lg-2 mb-3";
-    dreamsCol.style.display = "none";
-    descriptionCol.style.display = "none";
-    chapterDetailsCol.className = "col-lg-10 mb-3";
-  } else if (state === "word") {
-    wordsCol.style.display = "block";
-    dreamsCol.style.display = "block";
-    descriptionCol.style.display = "block";
-    wordsCol.className = "col-lg-2 mb-3";
-    dreamsCol.className = "col-lg-4 mb-3";
-    descriptionCol.className = "col-lg-6 mb-3";
-  }
-}
+            function scrollToElement(el) {
+                if (el) el.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
 
-// ------------------ BACK BUTTON ------------------
-function renderBackButton() {
-  const existing = document.getElementById("backToChaptersWrapper");
-  if (existing) existing.remove();
+            function getSlugFromURL() {
+                const path = decodeURIComponent(window.location.pathname);
+                const parts = path.split("/").filter(Boolean);
+                if (parts.length >= 2) return {
+                    type: parts[0],
+                    slug: parts[1]
+                };
+                return null;
+            }
 
-  const wrapper = document.createElement("div");
-  wrapper.id = "backToChaptersWrapper";
-  wrapper.className = "mt-4 text-center";
-  wrapper.innerHTML = `
+            function updateURL(slug = "", type = "chapter") {
+                const newURL = slug ? `${projectFolder}/${type}/${encodeURIComponent(slug)}` : `${projectFolder}/`;
+                history.pushState({}, "", newURL);
+            }
+
+            // ------------------ LAYOUT ------------------
+            function setLayout(state = "all") {
+                if (state === "all") {
+                    wordsCol.style.display = "none";
+                    dreamsCol.style.display = "none";
+                    descriptionCol.style.display = "none";
+                    chapterDetailsCol.className = "col-12";
+                } else if (state === "chapter") {
+                    wordsCol.style.display = "block";
+                    wordsCol.className = "col-lg-2 mb-3";
+                    dreamsCol.style.display = "none";
+                    descriptionCol.style.display = "none";
+                    chapterDetailsCol.className = "col-lg-10 mb-3";
+                } else if (state === "word") {
+                    wordsCol.style.display = "block";
+                    dreamsCol.style.display = "block";
+                    descriptionCol.style.display = "block";
+                    wordsCol.className = "col-lg-2 mb-3";
+                    dreamsCol.className = "col-lg-4 mb-3";
+                    descriptionCol.className = "col-lg-6 mb-3";
+                }
+            }
+
+            // ------------------ BACK BUTTON ------------------
+            function renderBackButton() {
+                const existing = document.getElementById("backToChaptersWrapper");
+                if (existing) existing.remove();
+
+                const wrapper = document.createElement("div");
+                wrapper.id = "backToChaptersWrapper";
+                wrapper.className = "mt-4 text-center";
+                wrapper.innerHTML = `
     <button id="backToChapters" class="btn btn-success px-4 py-2 fs-5">
       ⬅ الرجوع إلى قائمة الأحلام حسب المواضيع
     </button>`;
-  document.getElementById("secondRow").after(wrapper);
+                document.getElementById("secondRow").after(wrapper);
 
-  document.getElementById("backToChapters").onclick = () => {
-    showAllChapterDetails();
-    updateURL("", "chapter");
-  };
-}
+                document.getElementById("backToChapters").onclick = () => {
+                    showAllChapterDetails();
+                    updateURL("", "chapter");
+                };
+            }
 
-// ------------------ SHOW FUNCTIONS (modified) ------------------
-function showWords(chapter, highlightSlug = null) {
-  setLayout("chapter");
-  wordsDiv.innerHTML = "";
-  let hasWords = false;
+            // ------------------ SHOW FUNCTIONS (modified) ------------------
+            function showWords(chapter, highlightSlug = null) {
+                setLayout("chapter");
+                wordsDiv.innerHTML = "";
+                let hasWords = false;
 
-  const chapObj = data[chapter];
-  if (!chapObj) {
-    wordsDiv.innerHTML = `<div class="alert alert-info">لا توجد رموز في هذا الباب.</div>`;
-    fadeIn(wordsCard);
-    renderBackButton();
-    return;
-  }
+                const chapObj = data[chapter];
+                if (!chapObj) {
+                    wordsDiv.innerHTML = `<div class="alert alert-info">لا توجد رموز في هذا الباب.</div>`;
+                    fadeIn(wordsCard);
+                    renderBackButton();
+                    return;
+                }
 
-  // Loop through keys in the chapter object
-  Object.keys(chapObj).forEach(word => {
-    if (word === "chapter_details" || word === "chapter_slug") return;
-    const wordData = chapObj[word];
-    if (!wordData) return;
+                // Loop through keys in the chapter object
+                Object.keys(chapObj).forEach(word => {
+                    if (word === "chapter_details" || word === "chapter_slug") return;
+                    const wordData = chapObj[word];
+                    if (!wordData) return;
 
-    hasWords = true;
-    const btn = document.createElement("button");
-    btn.className = "btn btn-outline-success w-100 mb-2";
-    btn.textContent = word;
+                    hasWords = true;
+                    const btn = document.createElement("button");
+                    btn.className = "btn btn-outline-success w-100 mb-2";
+                    btn.textContent = word;
 
-    btn.onclick = function () {
-      highlightActive(wordsDiv, btn);
-      selectedWord = word;
-      selectedDream = null;
-      showDreams(chapter, word);
-      const slug = wordData.word_slug || word;
-      updateURL(slug, "word");
-    };
+                    btn.onclick = function() {
+                        highlightActive(wordsDiv, btn);
+                        selectedWord = word;
+                        selectedDream = null;
+                        showDreams(chapter, word);
+                        const slug = wordData.word_slug || word;
+                        updateURL(slug, "word");
+                    };
 
-    wordsDiv.appendChild(btn);
+                    wordsDiv.appendChild(btn);
 
-    // auto‑select if slug matches
-    if (highlightSlug && wordData.word_slug === highlightSlug) {
-      btn.click();
-    }
-  });
+                    // auto‑select if slug matches
+                    if (highlightSlug && wordData.word_slug === highlightSlug) {
+                        btn.click();
+                    }
+                });
 
-  if (!hasWords) {
-    wordsDiv.innerHTML = `<div class="alert alert-info">لا توجد رموز في هذا الباب.</div>`;
-  }
+                if (!hasWords) {
+                    wordsDiv.innerHTML = `<div class="alert alert-info">لا توجد رموز في هذا الباب.</div>`;
+                }
 
-  fadeIn(wordsCard);
-  renderBackButton();
-}
+                fadeIn(wordsCard);
+                renderBackButton();
+            }
 
-function showDreams(chapter, word, highlightSlug = null) {
-  setLayout("word");
-  dreamsDiv.innerHTML = "";
-  let hasDreams = false;
+            function showDreams(chapter, word, highlightSlug = null) {
+                setLayout("word");
+                dreamsDiv.innerHTML = "";
+                let hasDreams = false;
 
-  const wordData = data[chapter] && data[chapter][word];
-  if (!wordData) {
-    dreamsDiv.innerHTML = `<div class="alert alert-info">لا توجد أحلام لهذا الرمز.</div>`;
-    fadeIn(dreamsCard);
-    hide(descriptionCard);
-    return;
-  }
+                const wordData = data[chapter] && data[chapter][word];
+                if (!wordData) {
+                    dreamsDiv.innerHTML = `<div class="alert alert-info">لا توجد أحلام لهذا الرمز.</div>`;
+                    fadeIn(dreamsCard);
+                    hide(descriptionCard);
+                    return;
+                }
 
-  Object.keys(wordData).forEach(dreamKey => {
-    if (dreamKey === "word_slug") return;
-    const dreamObj = wordData[dreamKey];
-    if (!dreamObj) return;
+                Object.keys(wordData).forEach(dreamKey => {
+                    if (dreamKey === "word_slug") return;
+                    const dreamObj = wordData[dreamKey];
+                    if (!dreamObj) return;
 
-    hasDreams = true;
-    const btn = document.createElement("button");
-    btn.className = "btn btn-outline-success w-100 mb-2";
-    btn.textContent = dreamKey;
+                    hasDreams = true;
+                    const btn = document.createElement("button");
+                    btn.className = "btn btn-outline-success w-100 mb-2";
+                    btn.textContent = dreamKey;
 
-    btn.onclick = function () {
-      highlightActive(dreamsDiv, btn);
-      selectedDream = dreamKey;
-      showDescription(chapter, word, dreamKey);
-      const slug = dreamObj.dream_slug || dreamKey;
-      updateURL(slug, "dream");
-    };
+                    btn.onclick = function() {
+                        highlightActive(dreamsDiv, btn);
+                        selectedDream = dreamKey;
+                        showDescription(chapter, word, dreamKey);
+                        const slug = dreamObj.dream_slug || dreamKey;
+                        updateURL(slug, "dream");
+                    };
 
-    dreamsDiv.appendChild(btn);
+                    dreamsDiv.appendChild(btn);
 
-    // auto‑select
-    if (highlightSlug && dreamObj.dream_slug === highlightSlug) {
-      btn.click();
-    }
-  });
+                    // auto‑select
+                    if (highlightSlug && dreamObj.dream_slug === highlightSlug) {
+                        btn.click();
+                    }
+                });
 
-  if (!hasDreams) {
-    dreamsDiv.innerHTML = `<div class="alert alert-info">لا توجد أحلام لهذا الرمز.</div>`;
-  }
+                if (!hasDreams) {
+                    dreamsDiv.innerHTML = `<div class="alert alert-info">لا توجد أحلام لهذا الرمز.</div>`;
+                }
 
-  fadeIn(dreamsCard);
-  hide(descriptionCard);
-}
+                fadeIn(dreamsCard);
+                hide(descriptionCard);
+            }
 
-function showDescription(chapter, word, dream) {
-  const dreamObj = data[chapter] && data[chapter][word] && data[chapter][word][dream];
-  const meaning = (dreamObj && dreamObj.meaning) ? dreamObj.meaning : "<em>لا يوجد تفسير متاح.</em>";
+            function showDescription(chapter, word, dream) {
+                const dreamObj = data[chapter] && data[chapter][word] && data[chapter][word][dream];
+                const meaning = (dreamObj && dreamObj.meaning) ? dreamObj.meaning : "<em>لا يوجد تفسير متاح.</em>";
 
-  let adsHtml = "";
-  if (data["_ads"] && Array.isArray(data["_ads"]) && data["_ads"].length) {
-    adsHtml = `
+                let adsHtml = "";
+                if (data["_ads"] && Array.isArray(data["_ads"]) && data["_ads"].length) {
+                    adsHtml = `
   <div class="mt-4">
     ${data["_ads"].map(ad => `
-      <div class="p-3 mb-3 text-center border rounded bg-light" style="direction:rtl;">
-        ${ad.url ? `
+              <div class="p-3 mb-3 text-center border rounded bg-light" style="direction:rtl;">
+                ${ad.url ? `
           <a href="${ad.link || '#'}" target="_blank">
             <img 
               src="${assetBase}${ad.url}" 
@@ -311,116 +319,112 @@ function showDescription(chapter, word, dream) {
               style="max-height:250px; object-fit:cover;"
             >
           </a>` 
-        : ""}
-        ${ad.text ? `<p class="mb-0">${ad.text}</p>` : ""}
-      </div>
-    `).join("")}
+                : ""}
+                ${ad.text ? `<p class="mb-0">${ad.text}</p>` : ""}
+              </div>
+            `).join("")}
   </div>
 `;
-  }
+                }
 
-  descriptionDiv.innerHTML = `
+                descriptionDiv.innerHTML = `
     <div class="p-4 mb-3 bg-white rounded shadow-sm" 
          style="direction:rtl; text-align:right; line-height:1.9;">
       ${meaning}
       ${adsHtml}
     </div>`;
 
-  fadeIn(descriptionCard);
-  renderBackButton();
-  setTimeout(() => scrollToElement(descriptionCard), 300);
-}
+                fadeIn(descriptionCard);
+                renderBackButton();
+                setTimeout(() => scrollToElement(descriptionCard), 300);
+            }
 
-// (rest of your original functions unchanged) --
+            // (rest of your original functions unchanged) --
 
-function showAllChapterDetails() {
-  setLayout("all");
-  chapterDetailsDiv.innerHTML = Object.keys(data)
-    .filter(k => k !== "_ads")
-    .map(chapter => `
+            function showAllChapterDetails() {
+                setLayout("all");
+                chapterDetailsDiv.innerHTML = Object.keys(data)
+                    .filter(k => k !== "_ads")
+                    .map(chapter => `
       <div class="chapter-item mb-3 p-3 border rounded" style="cursor:pointer; direction:rtl;" data-chapter="${chapter}">
         <h5>${chapter}</h5>
         <p class="mb-0">${data[chapter].chapter_details || "<em>لا توجد تفاصيل متاحة.</em>"}</p>
       </div>`).join("");
 
-  document.querySelectorAll(".chapter-item").forEach(item => {
-    item.onclick = () => {
-      selectedChapter = item.dataset.chapter;
-      showSingleChapter(selectedChapter);
-      updateURL(data[selectedChapter].chapter_slug || selectedChapter, "chapter");
-    };
-  });
-}
+                document.querySelectorAll(".chapter-item").forEach(item => {
+                    item.onclick = () => {
+                        selectedChapter = item.dataset.chapter;
+                        showSingleChapter(selectedChapter);
+                        updateURL(data[selectedChapter].chapter_slug || selectedChapter, "chapter");
+                    };
+                });
+            }
 
-function showSingleChapter(chapter) {
-  setLayout("chapter");
-  chapterDetailsDiv.innerHTML = `
+            function showSingleChapter(chapter) {
+                setLayout("chapter");
+                chapterDetailsDiv.innerHTML = `
     <div class="p-3 rounded border" style="direction:rtl;">
       <h5>${chapter}</h5>
       <p class="mb-0">${data[chapter].chapter_details || "<em>لا توجد تفاصيل متاحة.</em>"}</p>
     </div>`;
-  showWords(chapter);
-  renderBackButton();
-}
+                showWords(chapter);
+                renderBackButton();
+            }
 
-function resolveSlugByValue(slug, type) {
-  for (const chapter in data) {
-    if (type === "chapter" && data[chapter].chapter_slug === slug) {
-      showSingleChapter(chapter);
-      scrollToElement(chapterDetailsCard);
-      return;
-    }
-    for (const word in data[chapter]) {
-      if (["chapter_details", "chapter_slug"].includes(word)) continue;
-      if (!data[chapter][word]) continue;
+            function resolveSlugByValue(slug, type) {
+                for (const chapter in data) {
+                    if (type === "chapter" && data[chapter].chapter_slug === slug) {
+                        showSingleChapter(chapter);
+                        scrollToElement(chapterDetailsCard);
+                        return;
+                    }
+                    for (const word in data[chapter]) {
+                        if (["chapter_details", "chapter_slug"].includes(word)) continue;
+                        if (!data[chapter][word]) continue;
 
-      if (type === "word" && data[chapter][word].word_slug === slug) {
-        showSingleChapter(chapter);
-        showWords(chapter, slug);
-        scrollToElement(wordsCard);
-        return;
-      }
+                        if (type === "word" && data[chapter][word].word_slug === slug) {
+                            showSingleChapter(chapter);
+                            showWords(chapter, slug);
+                            scrollToElement(wordsCard);
+                            return;
+                        }
 
-      for (const dream in data[chapter][word]) {
-        if (dream === "word_slug") continue;
-        if (type === "dream" && data[chapter][word][dream].dream_slug === slug) {
-          showSingleChapter(chapter);
-          showWords(chapter, data[chapter][word].word_slug);
-          showDreams(chapter, word, slug);
-          showDescription(chapter, word, dream);
-          scrollToElement(descriptionCard);
-          return;
-        }
-      }
-    }
-  }
-}
+                        for (const dream in data[chapter][word]) {
+                            if (dream === "word_slug") continue;
+                            if (type === "dream" && data[chapter][word][dream].dream_slug === slug) {
+                                showSingleChapter(chapter);
+                                showWords(chapter, data[chapter][word].word_slug);
+                                showDreams(chapter, word, slug);
+                                showDescription(chapter, word, dream);
+                                scrollToElement(descriptionCard);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
 
-// INIT
-document.addEventListener("DOMContentLoaded", () => {
-  fetch(`${projectFolder}/dream-data?action=data`)
-    .then(res => res.json())
-    .then(json => {
-      data = json;
-     console.log("Data loaded:", data);
-      const slugData = window.initialSlug || getSlugFromURL();
-      if (slugData) resolveSlugByValue(slugData.slug, slugData.type);
-      else showAllChapterDetails();
-    })
-    .catch(err => {
-      chapterDetailsDiv.innerHTML = "<div class='text-danger'>حدث خطأ أثناء تحميل البيانات.</div>";
-      console.error(err);
-    });
-});
+            // INIT
+            document.addEventListener("DOMContentLoaded", () => {
+                fetch(`${projectFolder}/dream-data?action=data`)
+                    .then(res => res.json())
+                    .then(json => {
+                        data = json;
+                        console.log("Data loaded:", data);
+                        const slugData = window.initialSlug || getSlugFromURL();
+                        if (slugData) resolveSlugByValue(slugData.slug, slugData.type);
+                        else showAllChapterDetails();
+                    })
+                    .catch(err => {
+                        chapterDetailsDiv.innerHTML =
+                        "<div class='text-danger'>حدث خطأ أثناء تحميل البيانات.</div>";
+                        console.error(err);
+                    });
+            });
 
-window.onpopstate = () => {
-  const slugData = getSlugFromURL();
-  slugData ? resolveSlugByValue(slugData.slug, slugData.type) : showAllChapterDetails();
-};
-</script>
-
-
-
-
-
-@endpush
+            window.onpopstate = () => {
+                const slugData = getSlugFromURL();
+                slugData ? resolveSlugByValue(slugData.slug, slugData.type) : showAllChapterDetails();
+            };
+        </script>
+    @endpush
