@@ -18,26 +18,7 @@
     <div class="container py-5 dream-container">
         <h2 class="text-center mb-5 fw-bold text-gradient">🌙 Dream Explorer</h2>
 
-        <!-- Search Section -->
-        {{-- <div class="row mt-4 justify-content-center">
-            <div class="col-lg-8">
-                <div class="input-group shadow rounded-pill overflow-hidden">
-                    <input type="text" id="searchInput" class="form-control border-0 ps-4"
-                        placeholder="🔍 Search dreams...">
-                    <button class="btn btn-secondary px-4" id="searchBtn">Search</button>
-                </div>
 
-                <div id="searchError" class="custom-error mt-3" style="display:none;">
-                    <span class="icon">😢</span>
-                    <span id="errorText">No results found.</span>
-                    <div class="progress-line"></div>
-                </div>
-
-                <div id="searchResults" class="mt-3"></div>
-            </div>
-        </div> --}}
-
-        <!-- HTML: put this where your original row was -->
         <div class="row g-4 hide-dream">
             <div id="chapterDetailsCol" class="col-12">
                 <section id="chapterDetailsCard" class="fade-in show section-box text-center">
@@ -116,7 +97,7 @@
             let selectedChapter = null;
             let selectedWord = null;
             let selectedDream = null;
-            const projectFolder = ""; // leave empty or set if needed
+            const projectFolder = "";
 
             // ------------------ HELPERS ------------------
             function fadeIn(el) {
@@ -157,7 +138,10 @@
 
             function updateURL(slug = "", type = "chapter") {
                 const newURL = slug ? `${projectFolder}/${type}/${encodeURIComponent(slug)}` : `${projectFolder}/`;
-                history.pushState({}, "", newURL);
+                history.pushState({
+                    type,
+                    slug
+                }, "", newURL);
             }
 
             // ------------------ LAYOUT ------------------
@@ -198,12 +182,25 @@
                 document.getElementById("secondRow").after(wrapper);
 
                 document.getElementById("backToChapters").onclick = () => {
-                    showAllChapterDetails();
-                    updateURL("", "chapter");
+                    if (selectedDream) {
+                        selectedDream = null;
+                        hide(descriptionCard);
+                        fadeIn(dreamsCard);
+                        updateURL(data[selectedChapter][selectedWord].word_slug, "word");
+                    } else if (selectedWord) {
+                        selectedWord = null;
+                        hide(dreamsCard);
+                        hide(descriptionCard);
+                        fadeIn(wordsCard);
+                        updateURL(data[selectedChapter].chapter_slug, "chapter");
+                    } else {
+                        showAllChapterDetails();
+                        updateURL("", "chapter");
+                    }
                 };
             }
 
-            // ------------------ SHOW FUNCTIONS (modified) ------------------
+            // ------------------ SHOW FUNCTIONS ------------------
             function showWords(chapter, highlightSlug = null) {
                 setLayout("chapter");
                 wordsDiv.innerHTML = "";
@@ -217,7 +214,6 @@
                     return;
                 }
 
-                // Loop through keys in the chapter object
                 Object.keys(chapObj).forEach(word => {
                     if (word === "chapter_details" || word === "chapter_slug") return;
                     const wordData = chapObj[word];
@@ -239,7 +235,6 @@
 
                     wordsDiv.appendChild(btn);
 
-                    // auto‑select if slug matches
                     if (highlightSlug && wordData.word_slug === highlightSlug) {
                         btn.click();
                     }
@@ -286,7 +281,6 @@
 
                     dreamsDiv.appendChild(btn);
 
-                    // auto‑select
                     if (highlightSlug && dreamObj.dream_slug === highlightSlug) {
                         btn.click();
                     }
@@ -307,29 +301,20 @@
                 let adsHtml = "";
                 if (data["_ads"] && Array.isArray(data["_ads"]) && data["_ads"].length) {
                     adsHtml = `
-  <div class="mt-4">
-    ${data["_ads"].map(ad => `
-              <div class="p-3 mb-3 text-center border rounded bg-light" style="direction:rtl;">
-                ${ad.url ? `
-          <a href="${ad.link || '#'}" target="_blank">
-            <img 
-              src="${assetBase}${ad.url}" 
-              alt="إعلان" 
-              class="img-fluid rounded mb-2" 
-              style="max-height:250px; object-fit:cover;"
-            >
-          </a>` 
-                : ""}
-                ${ad.text ? `<p class="mb-0">${ad.text}</p>` : ""}
-              </div>
-            `).join("")}
-  </div>
-`;
+      <div class="mt-4">
+        ${data["_ads"].map(ad => `
+                          <div class="p-3 mb-3 text-center border rounded bg-light" style="direction:rtl;">
+                            ${ad.url ? `
+              <a href="${ad.link || '#'}" target="_blank">
+                <img src="${assetBase}${ad.url}" alt="إعلان" class="img-fluid rounded mb-2" style="max-height:250px; object-fit:cover;">
+              </a>` : ""}
+                            ${ad.text ? `<p class="mb-0">${ad.text}</p>` : ""}
+                          </div>`).join("")}
+      </div>`;
                 }
 
                 descriptionDiv.innerHTML = `
-    <div class="p-4 mb-3 bg-white rounded shadow-sm" 
-         style="direction:rtl; text-align:right; line-height:1.9;">
+    <div class="p-4 mb-3 bg-white rounded shadow-sm" style="direction:rtl; text-align:right; line-height:1.9;">
       ${meaning}
       ${adsHtml}
     </div>`;
@@ -338,8 +323,6 @@
                 renderBackButton();
                 setTimeout(() => scrollToElement(descriptionCard), 300);
             }
-
-            // (rest of your original functions unchanged) --
 
             function showAllChapterDetails() {
                 setLayout("all");
@@ -404,7 +387,7 @@
                 }
             }
 
-            // INIT
+            // ------------------ INIT ------------------
             document.addEventListener("DOMContentLoaded", () => {
                 fetch(`${projectFolder}/dream-data?action=data`)
                     .then(res => res.json())
@@ -422,9 +405,34 @@
                     });
             });
 
-            window.onpopstate = () => {
+            // ------------------ POPSTATE FIX ------------------
+            window.addEventListener("popstate", () => {
+                hide(descriptionCard);
                 const slugData = getSlugFromURL();
-                slugData ? resolveSlugByValue(slugData.slug, slugData.type) : showAllChapterDetails();
-            };
+
+                // ✅ Fix: dream → word
+                if (slugData && slugData.type === "word") {
+                    fadeIn(dreamsCard);
+                    hide(descriptionCard);
+                    selectedDream = null;
+                    return;
+                }
+
+                hide(wordsCard);
+                hide(dreamsCard);
+
+                // ✅ Fix: Stop further back when at root & hide sections
+                if (window.location.pathname === "/" || window.location.pathname === projectFolder + "/") {
+                    hide(wordsCard);
+                    hide(dreamsCard);
+                    hide(descriptionCard);
+                    showAllChapterDetails();
+                    history.pushState(null, "", "/"); // stop back here
+                    return;
+                }
+
+                if (slugData) resolveSlugByValue(slugData.slug, slugData.type);
+                else showAllChapterDetails();
+            });
         </script>
     @endpush
